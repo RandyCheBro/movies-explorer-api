@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('./middlewares/cors');
+const limiter = require('./middlewares/rateLimiter');
 
 const app = express();
 
@@ -18,6 +19,8 @@ mongoose.connect(MONGOOSE_CONNECT);
 app.use(express.json());
 
 app.use(requestLogger);
+
+app.use(limiter);
 
 app.use(helmet());
 
