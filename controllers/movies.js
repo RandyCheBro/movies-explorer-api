@@ -28,7 +28,7 @@ const createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные при создании карточки. `));
+        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные при создании фильма. `));
       } else {
         next(err);
       }
@@ -52,20 +52,20 @@ const deleteMovie = (req, res, next) => {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFound(`Ошибка ${NotFound.name},Карточка с указанным _id не найдена.`);
+        throw new NotFound(`Ошибка ${NotFound.name},Фильм с указанным _id не найден.`);
       }
       if (!movie.owner.equals(owner)) {
-        throw new Forbidden(`Ошибка ${Forbidden.name},Нет прав для удаления чужой карточки.`);
+        throw new Forbidden(`Ошибка ${Forbidden.name},Нет прав для удаления чужого фильма.`);
       }
       return movie.deleteOne()
         .then(() => {
-          res.status(200).send({ message: 'Карточка удалена' });
+          res.status(200).send({ message: 'Фильм удален' });
         })
         .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные для удаления карточки.`));
+        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные для удаления фильма.`));
       } else {
         next(err);
       }

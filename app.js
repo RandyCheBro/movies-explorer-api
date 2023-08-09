@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
-/* const cors = require('cors'); */
 const cors = require('./middlewares/cors');
 
 const app = express();
@@ -11,8 +10,6 @@ const app = express();
 const routes = require('./routes/routes');
 const error = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-/* const { PORT = 3000, MONGOOSE_CONNECT = 'mongodb://127.0.0.1:27017/filmsdb' } = process.env; */
 const { PORT, MONGOOSE_CONNECT } = require('./utils/config');
 
 app.use(cors);
@@ -39,5 +36,6 @@ app.use(errors());
 app.use(error);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log('Сервер запущен');
 });

@@ -2,8 +2,6 @@
 const allowedCors = [
   'https://praktikum.tk',
   'http://praktikum.tk',
-  'https://domainname.kolya.nomoreparties.sbs',
-  'http://domainname.kolya.nomoreparties.sbs',
   'http://localhost:3000',
 ];
 
