@@ -4,6 +4,7 @@ const User = require('../models/user');
 const BadRequest = require('../errors/BadRequest');
 const NotFound = require('../errors/NotFound');
 const Conflict = require('../errors/Conflict');
+const { messages } = require('../utils/constants');
 
 const { JWT_SECRET } = process.env;
 
@@ -16,22 +17,23 @@ const updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFound(
-          `Ошибка ${NotFound.name},Пользователь с указанным _id не найден.`,
-        );
+        throw new NotFound(`${NotFound.name} ${messages.notFoundUser}`);
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        next(new BadRequest(`${err.name} ${messages.validationErr}`));
+      }
+      if (err.code === 11000) {
         next(
-          new BadRequest(
-            `Ошибка ${err.name}, Переданы некорректные данные при обновлении профиля.`,
+          new Conflict(
+            `${err.name} ${messages.conflictUserErr}`,
           ),
         );
-      } else {
-        next(err);
+        return;
       }
+      next(err);
     });
 };
 
@@ -51,16 +53,16 @@ const createUser = (req, res, next) => {
           email,
         });
       })
-        // eslint-disable-next-line consistent-return
         .catch((err) => {
           if (err.code === 11000) {
-            return next(
+            next(
               new Conflict(
-                `Ошибка ${err.name}, Данный email уже используется другим пользователем`,
+                `${err.name} ${messages.conflictUserErr}`,
               ),
             );
+          } else {
+            next(err);
           }
-          next(err);
         });
     })
     .catch(next);
@@ -70,7 +72,6 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
-      // eslint-disable-next-line no-undef
       const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.status(200).send({ token });
     })
@@ -78,7 +79,7 @@ const login = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(
           new BadRequest(
-            `Ошибка ${err.name}, Переданы некорректные данные при создании пользователя.`,
+            `${err.name} ${messages.validationErr}`,
           ),
         );
       } else {

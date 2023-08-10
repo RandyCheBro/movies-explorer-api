@@ -1,4 +1,5 @@
 const routes = require('express').Router();
+const { messages } = require('../utils/constants');
 
 const movieRoutes = require('./movieRoutes');
 const userRoutes = require('./userRoutes');
@@ -16,7 +17,7 @@ routes.use('/users', userRoutes);
 routes.use('/movies', movieRoutes);
 
 routes.use('*', (req, res, next) => {
-  next(new NotFound('Некорректный маршрут'));
+  next(new NotFound(`${messages.wrongRoute}`));
 });
 
 module.exports = routes;

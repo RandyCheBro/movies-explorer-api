@@ -5,7 +5,6 @@ const allowedCors = [
   'http://localhost:3000',
 ];
 
-// eslint-disable-next-line consistent-return
 const cors = (req, res, next) => {
   const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
 
@@ -31,7 +30,8 @@ const cors = (req, res, next) => {
     // разрешаем кросс-доменные запросы с этими заголовками
     res.header('Access-Control-Allow-Headers', requestHeaders);
     // завершаем обработку запроса и возвращаем результат клиенту
-    return res.end();
+    res.end();
+    return;
   }
 
   next();

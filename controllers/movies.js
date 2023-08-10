@@ -2,6 +2,7 @@ const Movie = require('../models/movie');
 const BadRequest = require('../errors/BadRequest');
 const NotFound = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
+const { messages } = require('../utils/constants');
 
 const createMovie = (req, res, next) => {
   const owner = req.user._id;
@@ -28,7 +29,7 @@ const createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные при создании фильма. `));
+        next(new BadRequest(`${err.name} ${messages.validationErr}`));
       } else {
         next(err);
       }
@@ -39,7 +40,7 @@ const getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
     .then((movies) => {
       if (!movies) {
-        throw new NotFound(`Ошибка ${NotFound.name},Сохраненные фильмы не найдены.`);
+        throw new NotFound(`${NotFound.name} ${messages.notFoundMovies}`);
       }
       res.status(200).send(movies);
     })
@@ -52,20 +53,20 @@ const deleteMovie = (req, res, next) => {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFound(`Ошибка ${NotFound.name},Фильм с указанным _id не найден.`);
+        throw new NotFound(`${NotFound.name} ${messages.notFoundMoviesId}`);
       }
       if (!movie.owner.equals(owner)) {
-        throw new Forbidden(`Ошибка ${Forbidden.name},Нет прав для удаления чужого фильма.`);
+        throw new Forbidden(`Ошибка ${Forbidden.name} ${messages.forbiddenDeleteMovie}`);
       }
       return movie.deleteOne()
         .then(() => {
-          res.status(200).send({ message: 'Фильм удален' });
+          res.status(200).send({ message: `${messages.deleteMovieSuccess}` });
         })
         .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest(`Ошибка ${err.name}, Переданы некорректные данные для удаления фильма.`));
+        next(new BadRequest(`${err.name} ${messages.validationErr}`));
       } else {
         next(err);
       }

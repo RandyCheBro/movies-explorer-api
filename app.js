@@ -8,6 +8,7 @@ const limiter = require('./middlewares/rateLimiter');
 
 const app = express();
 
+const { messages } = require('./utils/constants');
 const routes = require('./routes/routes');
 const error = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -26,7 +27,7 @@ app.use(helmet());
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
+    throw new Error(`${messages.dropServerErr}`);
   }, 0);
 });
 
@@ -39,6 +40,4 @@ app.use(errors());
 app.use(error);
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log('Сервер запущен');
 });

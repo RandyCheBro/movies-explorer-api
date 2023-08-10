@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { messages } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   // страна создания фильма.
@@ -33,7 +34,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (link) => validator.isURL(link),
-      message: 'Ошибка валидации',
+      message: `${messages.validationSchemaErr}`,
     },
   },
   // ссылка на трейлер фильма.
@@ -42,7 +43,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (link) => validator.isURL(link),
-      message: 'Ошибка валидации',
+      message: `${messages.validationSchemaErr}`,
     },
   },
   // миниатюрное изображение постера к фильму.
@@ -51,7 +52,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (link) => validator.isURL(link),
-      message: 'Ошибка валидации',
+      message: `${messages.validationSchemaErr}`,
     },
   },
   // _id пользователя, который сохранил фильм.

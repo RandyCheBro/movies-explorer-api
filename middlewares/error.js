@@ -3,7 +3,5 @@ module.exports = ((err, req, res, next) => {
   res.status(statusCode).send({
     message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
   });
-  // eslint-disable-next-line no-console
-  console.log(`${err.statusCode} ${err.name}`);
   next();
 });
