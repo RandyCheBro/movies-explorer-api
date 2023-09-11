@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
-const cors = require('./middlewares/cors');
+const cors = require('cors');
 const limiter = require('./middlewares/rateLimiter');
 
 const app = express();
@@ -14,7 +14,7 @@ const error = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, MONGOOSE_CONNECT } = require('./utils/config');
 
-app.use(cors);
+app.use(cors());
 mongoose.connect(MONGOOSE_CONNECT);
 
 app.use(express.json());
