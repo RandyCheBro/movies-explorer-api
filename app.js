@@ -21,11 +21,12 @@ const corsOptions = {
     'http://movie.nomoreparties.co',
     'http://movie.nomoreparties.co',
     'http://localhost:3000',
+    'http://localhost:3001',
   ],
   optionsSuccessStatus: 200,
   credentials: true,
 };
-app.use(cors(corsOptions));
+app.use('*', cors(corsOptions));
 
 mongoose.connect(MONGOOSE_CONNECT);
 
