@@ -14,7 +14,19 @@ const error = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, MONGOOSE_CONNECT } = require('./utils/config');
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'https://api.movie.nomoreparties.co',
+    'https://api.movie.nomoreparties.co',
+    'http://movie.nomoreparties.co',
+    'http://movie.nomoreparties.co',
+    'http://localhost:3000',
+  ],
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 mongoose.connect(MONGOOSE_CONNECT);
 
 app.use(express.json());
